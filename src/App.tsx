@@ -3,8 +3,11 @@ import axios from "axios";
 
 const API_ENDPOINT = "https://hn.algolia.com/api/v1/search?query=";
 
-const useSemiPersistentState = (key: string, initialState: string) => {
-  const [value, setValue] = React.useState<string>(
+const useSemiPersistentState = (
+  key: string,
+  initialState: string
+): [string, (v: string) => void] => {
+  const [value, setValue] = React.useState(
     localStorage!.getItem(key) || initialState
   );
 
@@ -86,7 +89,7 @@ type Actions =
       };
     };
 
-const storiesReducer = (state: State, action: Actions) => {
+const storiesReducer = (state: State, action: Actions): State => {
   switch (action.type) {
     case "STORIES_FETCH_INIT":
       return {
@@ -191,7 +194,7 @@ const List = ({ list, onRemoveItem }: ListProps) =>
   ));
 
 type SearchFormProps = {
-  searchTerm: string | React.Dispatch<React.SetStateAction<string>>;
+  searchTerm: string;
   onSearchInput: (e: React.ChangeEvent<HTMLInputElement>) => void;
   onSearchSubmit: (e: React.FormEvent) => void;
 };
@@ -222,9 +225,7 @@ const App = () => {
 
   const [url, setUrl] = React.useState(`${API_ENDPOINT}${searchTerm}`);
 
-  const [stories, dispatchStories] = React.useReducer<
-    React.Reducer<State, Actions>
-  >(storiesReducer, {
+  const [stories, dispatchStories] = React.useReducer(storiesReducer, {
     data: [],
     isLoading: false,
     isError: false
