@@ -109,9 +109,11 @@ const Item = ({ item, onRemoveItem }: ItemProps) => (
 );
 
 const List = ({ list, onRemoveItem }: ListProps) =>
-	list.map(item => (
-		<Item key={item.objectID} item={item} onRemoveItem={onRemoveItem} />
-	));
+	<React.Fragment>
+		{list.map(item => (
+			<Item key={item.objectID} item={item} onRemoveItem={onRemoveItem} />
+		))}
+	</React.Fragment>
 
 const SearchForm = ({
 	searchTerm,
@@ -200,7 +202,6 @@ const App = () => {
 			{stories.isLoading ? (
 				<p>Loading ...</p>
 			) : (
-				/* @ts-ignore */
 				<List list={stories.data} onRemoveItem={handleRemoveStory} />
 			)}
 		</div>
